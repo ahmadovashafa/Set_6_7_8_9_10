@@ -1,0 +1,193 @@
+-- Set 6
+
+/*1. **SELECT with DISTINCT clause**
+1.Write a SQL statement to select all distinct job titles from the 'employees' table.*/
+--select*from employees;
+--select*from jobs;
+
+select distinct j.job_title 
+from employees e
+join jobs j on e.job_id=j.job_id;
+
+/*SELECT with ALIAS
+2.Write a SQL statement to display the 'employee_id' as 'Employee ID' 
+and 'first_name' as 'First Name' from the 'employees' table.*/
+
+select employee_id as EMPLOYEE_ID, first_name as "First Name" from employees;
+
+/*SELECT with ORDER BY clause
+3.Write a SQL statement to select all employees' first names, sorted in ascending order.*/
+
+select first_name from employees
+order by first_name;
+
+/*SELECT with GROUP BY clause
+4.Write a SQL statement to find the total salary for each job title.*/
+
+select j.job_title, sum(e.salary) as total_salary
+from employees e
+join jobs j on e.job_id=j.job_id
+group by j.job_title;
+
+
+/*SELECT with LIMIT clause
+5.Write a SQL statement to select the top 5 highest earning employees.*/
+--select salary from employees;
+select salary from employees
+fetch next 5 rows only;--limit oraclede islemedi
+
+
+--set 7
+
+/*SELECT with JOIN and ON clause
+1.Write a SQL statement to display the employee's full name,
+department name, and location id.*/
+
+select e.first_name,e.last_name,d.location_id,d.department_name
+from employees e
+join departments d on e.department_id=d.department_id
+join locations l on d.location_id=l.location_id;
+
+/*SELECT with WHERE and LIKE clause
+2.Write a SQL statement to find all employees whose first name starts with 'A'.*/
+
+select *from employees
+where first_name like 'A%';
+
+/*SELECT with WHERE and IN clause
+3.Write a SQL statement to find all employees who work in department 10, 20 or 30.*/
+
+select*from employees where department_id in(10,20,30);
+
+/*SELECT with WHERE and BETWEEN clause
+4.Write a SQL statement to find all employees whose salary is between $5000 and $10000.*/
+
+select *from employees where salary between 5000 and 10000;
+
+/*SELECT with Aggregate Function and HAVING clause
+5.Write a SQL statement to find the job titles with more than 5 employees.*/
+
+select j.job_title
+from jobs j join employees e
+on j.job_id=e.job_id
+group by j.job_title
+having count(*)>5;
+
+
+-set8
+
+/*SELECT with multiple JOINS
+1.Write a SQL statement to display the employee's name, 
+their manager's name and the department name.*/
+
+select*from employees;
+select e.first_name,e.last_name,m.employee_id,d.department_name
+from employees e  join employees m 
+on e.manager_id=m.employee_id
+join departments d on e.department_id=d.department_id;
+
+/*SELECT with WHERE and OR clause
+2.Write a SQL statement to select all employees who are either 'IT_PROG' or 'SA_REP'.*/
+select*from employees 
+where job_id='IT_PROG' or job_id='SA_REP';
+
+/*SELECT with Aggregate Function and GROUP BY clause
+3.Write a SQL statement to find the average salary for each job title.*/
+
+select job_title, avg(e.salary) as average_salary
+from employees e join jobs j on 
+e.job_id=j.job_id
+group by j.job_title;
+
+/*SELECT with Subquery in WHERE clause
+4.Write a SQL statement to select all employees who earn more than the average salary.*/
+
+select*from employees  where salary>(select avg(salary) from employees);
+
+/*SELECT with UNION clause
+5.Write a SQL statement to combine the list of all department IDs in 'employees' and 'departments' table.*/
+
+select department_id from employees
+union 
+select department_id from departments;
+
+
+--SET9
+
+/**SELECT with JOIN and USING clause
+1.Write a SQL statement to display the employee's full name and 
+department name using the 'department_id' field.*/
+
+select e.first_name,e.last_name,d.department_name
+from employees e join departments d on
+e.department_id=d.department_id;
+
+/*SELECT with CASE statement
+2.Write a SQL statement to categorize employees' salaries into
+'Low', 'Medium' and 'High'*/
+
+select salary,
+  case
+    when  salary <5000 then 'Low'
+    when salary >= 5000 and salary < 12000 then 'Medium'
+    else 'High'
+  end 
+from employees
+order by salary desc;
+
+/*SELECT with Subquery in SELECT clause
+3.Write a SQL statement to display the department name and the highest salary in each department.*/
+
+select department_name,(select max(salary) from employees
+where department_id=d.department_id) from departments d;
+
+
+/*SELECT with WHERE and NULL clause
+4.Write a SQL statement to find all employees with no commission_pct.*/
+
+select*from employees 
+where commission_pct is null;
+
+/*SELECT with GROUP BY and ROLLUP clause
+5.Write a SQL statement to show the total salary,
+grouped by department and job title.*/
+
+select d.department_name,j.job_title,sum(e.salary) as total_salary
+from employees e join departments d on
+e.department_id=d.department_id
+join jobs j on e.job_id=j.job_id
+group by rollup(d.department_name,j.job_title);
+
+
+--set10
+
+/*SELECT with Self JOIN
+1.Write a SQL statement to find pairs of employees who have the same job title.*/
+
+--
+
+/*SELECT with Aggregate Function and WHERE clause
+2.Write a SQL statement to find the total salary
+of employees whose department id is 30.*/
+
+select sum(salary) as total_salary from employees where department_id=30;
+ select*from employees where department_id=30;
+
+/*SELECT with UNION ALL clause
+3.Write a SQL statement to combine the list of all department IDs in 
+'employees' and 'departments' table including duplicates.*/
+
+select department_id from employees
+union all
+select department_id from departments;
+
+/*SELECT with NOT IN clause
+4.Write a SQL statement to select all employees 
+who do not work in department 30, 50 or 80.*/
+
+select *from employees where department_id not in (30,50,80);
+
+/*SELECT with Subquery in FROM clause
+5.Write a SQL statement to select the highest paid employee from each department.*/
+
+--
